@@ -1,10 +1,8 @@
 import { connectDB } from "@/utils/db";
 import User, { IUser } from "@/models/user";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
-
-const JWT_SECRET = process.env.JWT_SECRET as string;
+import { createSession } from "@/utils/session";
 
 export async function POST(req: Request) {
   await connectDB();
@@ -22,21 +20,24 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: false, message: "Incorrect password" }, { status: 401 });
     }
 
-    const token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, { expiresIn: "1d" });
+    const _user = {
+      id: user._id as string,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      role: user.role
+    };
 
-    return NextResponse.json({
+    await createSession(_user.id, user.email, `${user.firstName} ${user.lastName}`, _user.role);
+
+    const response = NextResponse.json({
       success: true,
-      token,
-      user: {
-        id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        role: user.role
-      }
+      user: _user
     }, {
       status: 200
     });
+
+    return response;
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }

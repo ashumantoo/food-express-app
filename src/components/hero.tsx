@@ -4,7 +4,6 @@ import React from 'react'
 const HeroComponent = () => {
   return (
     <div className="h-full relative">
-      <div className='h-0.5 bg-red-500'></div>
       <img
         src="/hero-img.jpg"
         className="bg-transparent"

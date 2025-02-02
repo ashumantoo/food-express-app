@@ -1,4 +1,5 @@
 'use client'
+import Header from '@/components/header';
 import { API_ENDPOINTS } from '@/utils/api-endpoints';
 import { RoleTypeEnum, UserLoginInitialValue } from '@/utils/const';
 import { IUserLogin } from '@/utils/types';
@@ -19,8 +20,10 @@ function Login() {
       });
 
       const jsonResponse = await apiResponse.json();
-      if (jsonResponse.success && jsonResponse.user.role) {
-        if (jsonResponse.user.role === RoleTypeEnum.USER) {
+      if (jsonResponse.success) {
+        const { user } = jsonResponse;
+        localStorage.setItem('user', JSON.stringify(user));
+        if (user.role === RoleTypeEnum.USER) {
           router.push("/");
         } else {
           router.push("/restaurant-owner/dashboard");
@@ -46,6 +49,7 @@ function Login() {
 
   return (
     <div className='min-h-screen'>
+      <Header />
       <div className='h-0.5 bg-red-500'></div>
       <div className='w-2/5 m-auto py-6 my-10 bg-gray-100 shadow-md p-4'>
         <h3 className='text-xl font-bold text-center'>Welcome back, Please Login</h3>

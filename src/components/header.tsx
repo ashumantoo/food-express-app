@@ -1,26 +1,76 @@
+'use client'
+import { API_ENDPOINTS } from '@/utils/api-endpoints';
+import { RoleTypeEnum } from '@/utils/const';
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import { useRouter } from 'next/navigation'
+import React, { useEffect, useState } from 'react';
 
 const Header = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [username, setUsername] = useState("");
+  const [userRole, setUserRole] = useState("");
+  const router = useRouter();
+
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    if (user) {
+      setIsAuthenticated(true);
+      const userData = JSON.parse(user);
+      setUsername(userData.firstName);
+      setUserRole(userData.role);
+    }
+  });
+
+  const handleLogout = async () => {
+    try {
+      const apiResponse = await fetch(API_ENDPOINTS.logout, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include"
+      });
+
+      const jsonResponse = await apiResponse.json();
+      if (jsonResponse.success) {
+        localStorage.removeItem("user");
+        setIsAuthenticated(false);
+        router.replace('/login');
+        router.refresh(); // Force refresh to reflect changes immediately
+        alert(jsonResponse.message);
+      } else {
+        alert(jsonResponse.message);
+      }
+    } catch (error: any) {
+      console.log(error);
+      alert(error.message);
+      throw error;
+    }
+  };
+
   return (
-    <div className="h-16 px-8">
-      <div className='flex items-center justify-between'>
-        <Link href={'/'}>
-          <Image
-            src="/logo.png"
-            alt='Company Logo'
-            width={70}
-            height={70}
-          />
-        </Link>
-        <nav className='mr-4 flex items-center gap-4'>
-          <Link href={'/login'} className='text-lg'>LogIn</Link>
-          <Link href={'/register'} className='text-lg'>Register</Link>
-          <Link href={'/'} className='text-lg'>Username</Link>
-        </nav>
+    <>
+      <div className="h-16 px-8">
+        <div className='flex items-center justify-between'>
+          <Link href={'/'}>
+            <Image
+              src="/logo.png"
+              alt='Company Logo'
+              width={70}
+              height={70}
+            />
+          </Link>
+          <nav className='mr-4 flex items-center gap-4'>
+            {!isAuthenticated && <Link href={'/login'} className='text-lg'>LogIn</Link>}
+            {!isAuthenticated && <Link href={'/register'} className='text-lg'>Register</Link>}
+            {isAuthenticated && <Link href={userRole === RoleTypeEnum.USER ? '/profile' : '/restaurant-owner/settings'} className='text-lg'>{username}</Link>}
+            {isAuthenticated && userRole === RoleTypeEnum.USER && <Link href={'/cart'} className='text-lg'>Cart</Link>}
+            {isAuthenticated && userRole === RoleTypeEnum.USER && <Link href={'/orders'} className='text-lg'>Orders</Link>}
+            {isAuthenticated && <button className='text-lg' onClick={handleLogout}>Logout</button>}
+          </nav>
+        </div>
       </div>
-    </div>
+      <div className='h-0.5 bg-red-500'></div>
+    </>
   )
 }
 

@@ -1,8 +1,12 @@
+import Header from '@/components/header'
 import React from 'react'
 
 function RestaurantDetails() {
   return (
-    <div>RestaurantDetails</div>
+    <div>
+      <Header />
+      RestaurantDetails
+    </div>
   )
 }
 

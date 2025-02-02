@@ -1,5 +1,7 @@
 const baseUrl = process.env.API_BASE_URL || "http://localhost:3000/api";
 export const API_ENDPOINTS = {
   register: `${baseUrl}/auth/register`,
-  login: `${baseUrl}/auth/login`
+  login: `${baseUrl}/auth/login`,
+  logout: `${baseUrl}/auth/logout`,
+  createRestaurant:`${baseUrl}/restaurants`
 }

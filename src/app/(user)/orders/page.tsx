@@ -1,8 +1,12 @@
+import Header from '@/components/header'
 import React from 'react'
 
 const UserOrders = () => {
   return (
-    <div>UserOrders</div>
+    <div>
+      <Header />
+      UserOrders
+    </div>
   )
 }
 
