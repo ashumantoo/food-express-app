@@ -1,18 +1,18 @@
 import { NextResponse } from 'next/server';
 import { connectDB } from "@/utils/db";
-import Restaurant, { IRestaurantModel } from '@/models/restaurant';
+import User, { IUserModel } from '@/models/user';
 
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     await connectDB();
     const { id } = await params;
-    const restaurant = await Restaurant.findById(id);
+    const user = await User.findById(id);
 
-    if (!restaurant) {
-      return NextResponse.json({ success: false, message: 'Restaurant not found' }, { status: 404 });
+    if (!user) {
+      return NextResponse.json({ success: false, message: 'user not found' }, { status: 404 });
     }
 
-    return NextResponse.json({ success: true, data: restaurant }, { status: 200 });
+    return NextResponse.json({ success: true, data: user }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
@@ -22,18 +22,18 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   try {
     await connectDB();
     const { id } = await params;
-    const body = await req.json() as IRestaurantModel;
+    const body = await req.json() as IUserModel;
 
-    const updatedRestaurant = await Restaurant.findByIdAndUpdate(id, body, { new: true });
+    const updatedUser = await User.findByIdAndUpdate(id, body, { new: true });
 
-    if (!updatedRestaurant) {
-      return NextResponse.json({ success: false, message: 'Restaurant not found' }, { status: 404 });
+    if (!updatedUser) {
+      return NextResponse.json({ success: false, message: 'User not found' }, { status: 404 });
     }
 
     return NextResponse.json({
       success: true,
-      message: "Restaurant updated successfully",
-      data: updatedRestaurant
+      message: "User updated successfully",
+      data: updatedUser
     }, {
       status: 200
     });

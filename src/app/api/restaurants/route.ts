@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { connectDB } from "@/utils/db";
-import Restaurant, { IRestaurant } from '@/models/restaurant';
+import Restaurant, { IRestaurantModel } from '@/models/restaurant';
+import User from '@/models/user';
 
 export async function GET() {
   try {
@@ -20,9 +21,10 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     await connectDB();
-    const body = await req.json() as IRestaurant;
+    const body = await req.json() as IRestaurantModel;
     const newRestaurant = new Restaurant(body);
     const _newRestaurant = await newRestaurant.save();
+    await User.findOneAndUpdate({ _id: body.owner }, { restaurant: _newRestaurant._id });
     return NextResponse.json({
       success: true,
       message: "Restaurant created successfully",

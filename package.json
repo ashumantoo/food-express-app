@@ -9,14 +9,19 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.6.0",
+    "@hookform/resolvers": "^3.10.0",
     "antd": "^5.23.3",
     "bcrypt": "^5.1.1",
+    "dayjs": "^1.11.13",
     "jose": "^5.9.6",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.9.6",
     "next": "15.1.6",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-hook-form": "^7.54.2",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

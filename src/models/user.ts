@@ -1,6 +1,6 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, ObjectId } from "mongoose";
 
-export interface IUser extends Document {
+export interface IUserModel extends Document {
   firstName: string;
   lastName: string;
   email: string;
@@ -11,7 +11,8 @@ export interface IUser extends Document {
   profileImage: string
   address: IAdress;
   role: string;
-  restaurantIds: string[]
+  restaurant: ObjectId;
+  isActive: boolean;
 }
 
 export interface IAdress {
@@ -22,7 +23,7 @@ export interface IAdress {
   zipcode: string;
 }
 
-const UserSchema = new Schema<IUser>(
+const UserSchema = new Schema<IUserModel>(
   {
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
@@ -45,9 +46,10 @@ const UserSchema = new Schema<IUser>(
         message: "Invalid role"
       }
     },
-    restaurantIds: [{ type: Schema.Types.ObjectId, ref: 'Restaurant' }]
+    restaurant: { type: Schema.Types.ObjectId, ref: 'Restaurant' },
+    isActive: { type: Boolean, default: true }
   },
   { timestamps: true }
 );
 
-export default mongoose.models.User || mongoose.model<IUser>("User", UserSchema);
+export default mongoose.models.User || mongoose.model<IUserModel>("User", UserSchema);

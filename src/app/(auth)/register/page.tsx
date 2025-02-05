@@ -5,7 +5,7 @@ import { CreateRestaurantInputInitialValue, cuisinesOptions, RoleTypeEnum, UserR
 import { ICreateRestaurantInput, IUserRegistration } from '@/utils/types';
 import { Select } from 'antd';
 import { useRouter } from 'next/navigation';
-import React, { ChangeEvent, FC, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
 
 const Register: FC = () => {
   const router = useRouter();
@@ -57,7 +57,7 @@ const Register: FC = () => {
   const handleCreateRestaurantSubmit = async (event: FormEvent) => {
     event.preventDefault();
     try {
-      const apiResponse = await fetch(API_ENDPOINTS.createRestaurant, {
+      const apiResponse = await fetch(API_ENDPOINTS.restaurants, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(createRestaurantValues),
@@ -103,6 +103,7 @@ const Register: FC = () => {
                     className='w-full py-2 px-2'
                     value={values.firstName}
                     onChange={handleChange}
+                    required
                   />
                 </div>
                 <div>
@@ -114,6 +115,7 @@ const Register: FC = () => {
                     className='w-full py-2 px-2'
                     value={values.lastName}
                     onChange={handleChange}
+                    required
                   />
                 </div>
               </div>
@@ -126,6 +128,7 @@ const Register: FC = () => {
                   className='w-full py-2 px-2'
                   value={values.email}
                   onChange={handleChange}
+                  required
                 />
               </div>
               <div className='px-6 my-4'>
@@ -137,17 +140,31 @@ const Register: FC = () => {
                   className='w-full py-2 px-2'
                   value={values.mobile}
                   onChange={handleChange}
+                  required
                 />
               </div>
               <div className='px-6 my-4'>
                 <label htmlFor="password">Password</label>
                 <input
                   id='password'
-                  type='text'
+                  type='password'
                   name='password'
                   className='w-full py-2 px-2'
                   value={values.password}
                   onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className='px-6 my-4'>
+                <label htmlFor="confirmPassword">Confirm Password</label>
+                <input
+                  id='confirmPassword'
+                  type='text'
+                  name='confirmPassword'
+                  className='w-full py-2 px-2'
+                  value={values.confirmPassword}
+                  onChange={handleChange}
+                  required
                 />
               </div>
               <div className='px-6 my-4'>
@@ -158,6 +175,7 @@ const Register: FC = () => {
                   className='w-full py-3 px-2 bg-white'
                   value={values.role}
                   onChange={handleChange}
+                  required
                 >
                   <option value="USER">User</option>
                   <option value="RESTAURANT_OWNER">Restaurant Owner</option>
@@ -183,6 +201,7 @@ const Register: FC = () => {
                   className='w-full py-2 px-2'
                   value={createRestaurantValues.name}
                   onChange={handleInputChange}
+                  required
                 />
               </div>
               <div className='px-6 my-4'>
@@ -211,6 +230,7 @@ const Register: FC = () => {
                   className='w-full py-2 px-2'
                   value={createRestaurantValues.email}
                   onChange={handleInputChange}
+                  required
                 />
               </div>
               <div className='px-6 my-4'>
@@ -222,6 +242,7 @@ const Register: FC = () => {
                   className='w-full py-2 px-2'
                   value={createRestaurantValues.mobile}
                   onChange={handleInputChange}
+                  required
                 />
               </div>
 
@@ -234,6 +255,7 @@ const Register: FC = () => {
                   className='w-full py-2 px-2'
                   value={createRestaurantValues.registrationNumber}
                   onChange={handleInputChange}
+                  required
                 />
               </div>
               <div className='px-6 my-4'>
@@ -253,6 +275,7 @@ const Register: FC = () => {
                     })
                   }}
                   className='w-full py-2 px-2'
+                  required
                 />
               </div>
               <div className='flex px-6 my-4 gap-6'>
@@ -273,6 +296,7 @@ const Register: FC = () => {
                       })
                     }}
                     className='w-full py-2 px-2'
+                    required
                   />
                 </div>
                 <div>
@@ -292,6 +316,7 @@ const Register: FC = () => {
                         }
                       })
                     }}
+                    required
                   />
                 </div>
               </div>
@@ -313,6 +338,7 @@ const Register: FC = () => {
                         }
                       })
                     }}
+                    required
                   />
                 </div>
                 <div>
@@ -332,6 +358,7 @@ const Register: FC = () => {
                         }
                       })
                     }}
+                    required
                   />
                 </div>
               </div>

@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document, ObjectId } from "mongoose";
 import { IAdress } from "./user";
 
-export interface IRestaurant extends Document {
+export interface IRestaurantModel extends Document {
   name: string;
   email: string;
   mobile: string;
@@ -9,12 +9,14 @@ export interface IRestaurant extends Document {
   address: IAdress;
   restaurantImage: string;
   cuisines: string[];
-  operatingHours: string[];
+  openingHours: string;
+  closingHours: string;
+  workingDays: string[];
   owner: ObjectId;
   isActive: boolean;
 }
 
-const RestaurantSchema = new Schema<IRestaurant>(
+const RestaurantSchema = new Schema<IRestaurantModel>(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
@@ -29,11 +31,13 @@ const RestaurantSchema = new Schema<IRestaurant>(
       zipcode: { type: String, required: true }
     },
     cuisines: { type: [String], default: [] },
-    operatingHours: { type: [String], default: [] },
+    openingHours: { type: String, default: "" },
+    workingDays: { type: [String], default: [] },
+    closingHours: { type: String, default: "" },
     owner: { type: Schema.Types.ObjectId, ref: 'User' },
     isActive: { type: Boolean, default: true }
   },
   { timestamps: true }
 );
 
-export default mongoose.models.User || mongoose.model<IRestaurant>("Restaurant", RestaurantSchema);
+export default mongoose.models.Restaurant || mongoose.model<IRestaurantModel>("Restaurant", RestaurantSchema);

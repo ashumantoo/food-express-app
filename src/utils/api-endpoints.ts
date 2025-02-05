@@ -3,5 +3,6 @@ export const API_ENDPOINTS = {
   register: `${baseUrl}/auth/register`,
   login: `${baseUrl}/auth/login`,
   logout: `${baseUrl}/auth/logout`,
-  createRestaurant:`${baseUrl}/restaurants`
+  user: `${baseUrl}/users`,
+  restaurants: `${baseUrl}/restaurants`,
 }

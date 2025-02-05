@@ -51,7 +51,7 @@ const Header = () => {
     <>
       <div className="h-16 px-8">
         <div className='flex items-center justify-between'>
-          <Link href={'/'}>
+          <Link href={userRole === RoleTypeEnum.USER ? '/' : '/restaurant-owner'}>
             <Image
               src="/logo.png"
               alt='Company Logo'

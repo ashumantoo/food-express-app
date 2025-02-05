@@ -1,5 +1,5 @@
 import { connectDB } from "@/utils/db";
-import User, { IUser } from "@/models/user";
+import User, { IUserModel } from "@/models/user";
 import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
 
@@ -7,7 +7,7 @@ export async function POST(req: Request) {
   await connectDB();
 
   try {
-    const { firstName, lastName, mobile, role, email, password } = await req.json() as IUser;
+    const { firstName, lastName, mobile, role, email, password } = await req.json() as IUserModel;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {

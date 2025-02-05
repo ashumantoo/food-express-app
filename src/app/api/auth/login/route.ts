@@ -1,8 +1,10 @@
 import { connectDB } from "@/utils/db";
-import User, { IUser } from "@/models/user";
+import User, { IUserModel } from "@/models/user";
 import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
 import { createSession } from "@/utils/session";
+import Restaurant from "@/models/restaurant";
+
 
 export async function POST(req: Request) {
   await connectDB();
@@ -10,7 +12,7 @@ export async function POST(req: Request) {
   try {
     const { email, password } = await req.json();
 
-    const user: IUser | null = await User.findOne({ email });
+    const user: IUserModel | null = await User.findOne({ email });
     if (!user) {
       return NextResponse.json({ success: false, message: "User not found with this email" }, { status: 401 });
     }
@@ -20,12 +22,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: false, message: "Incorrect password" }, { status: 401 });
     }
 
+    const restaurantDoc = await Restaurant.findOne({ owner: user._id }, '_id name');
+
     const _user = {
       id: user._id as string,
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-      role: user.role
+      role: user.role,
+      restaurantId: restaurantDoc._id
     };
 
     await createSession(_user.id, user.email, `${user.firstName} ${user.lastName}`, _user.role);
