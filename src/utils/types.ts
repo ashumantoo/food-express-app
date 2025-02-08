@@ -53,3 +53,12 @@ export interface IRestaurant {
   owner: string;
   isActive: boolean;
 }
+
+export interface MenuItem {
+  _id: string;
+  name: string;
+  price: number;
+  category: string;
+  description: string;
+  isAvailable: boolean;
+}

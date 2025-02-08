@@ -33,7 +33,13 @@ export async function POST(req: Request) {
       restaurantId: restaurantDoc._id
     };
 
-    await createSession(_user.id, user.email, `${user.firstName} ${user.lastName}`, _user.role);
+    await createSession(
+      _user.id,
+      user.email,
+      `${user.firstName} ${user.lastName}`,
+      restaurantDoc._id || "",
+      _user.role
+    );
 
     const response = NextResponse.json({
       success: true,
