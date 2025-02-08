@@ -5,6 +5,7 @@ export interface IMenu extends Document {
   name: string;
   description: string;
   price: number;
+  discountedPrice: number;
   category: string;
   imageUrl?: string;
   isAvailable: boolean;
@@ -16,6 +17,7 @@ const MenuSchema = new Schema<IMenu>(
     name: { type: String, required: true },
     description: { type: String },
     price: { type: Number, required: true },
+    discountedPrice: { type: Number, default: 0 },
     category: { type: String, required: true },
     imageUrl: { type: String },
     isAvailable: { type: Boolean, default: true },

@@ -54,11 +54,13 @@ export interface IRestaurant {
   isActive: boolean;
 }
 
-export interface MenuItem {
+export interface IMenu {
   _id: string;
   name: string;
   price: number;
+  discountedPrice: number;
   category: string;
   description: string;
   isAvailable: boolean;
+  imageUrl: string;
 }

@@ -1,5 +1,5 @@
 import { connectDB } from "@/utils/db";
-import Menu from '@/models/menu';
+import Menu, { IMenu } from '@/models/menu';
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { decrypt } from "@/utils/session";
@@ -23,10 +23,21 @@ export async function POST(req: Request) {
   if (session && session.role === RoleTypeEnum.USER) return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
 
   try {
-    const data = await req.json();
-    const newMenuItem = await Menu.create({ ...data, restaurantId: session?.restaurantId });
-    return NextResponse.json({ success: true, data: newMenuItem }, { status: 201 });
-  } catch (error) {
-    return NextResponse.json({ success: false, message: "Error creating menu item" }, { status: 500 });
+    const body = await req.json() as IMenu;
+    const menuData = {
+      ...body,
+      restaurantId: session?.restaurantId || ""
+    }
+    const newMenu = new Menu(menuData);
+    const _newMenu = await newMenu.save();
+    return NextResponse.json({
+      success: true,
+      message: "Menu created successfully",
+      data: _newMenu
+    }, {
+      status: 201
+    });
+  } catch (error: any) {
+    return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
 }

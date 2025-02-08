@@ -3,19 +3,44 @@ import React from 'react';
 import { useEffect, useState } from "react";
 import { Table, Button } from "antd";
 import Link from "next/link";
-import { MenuItem } from '@/utils/types';
+import { IMenu } from '@/utils/types';
+import { API_ENDPOINTS } from '@/utils/api-endpoints';
 
 const FoodMenu = () => {
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+  const [menus, setMenus] = useState<IMenu[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    fetch("/api/menu")
-      .then((res) => res.json())
-      .then((data) => {
-        setMenuItems(data);
-        setLoading(false);
+  const getMenus = async () => {
+    try {
+      setLoading(true);
+      const apiResponse = await fetch(`${API_ENDPOINTS.menu}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
       });
+
+      const jsonResponse = await apiResponse.json();
+      if (jsonResponse.success) {
+        return jsonResponse.data;
+      } else {
+        alert(jsonResponse.message);
+        throw new Error(jsonResponse.message);
+      }
+    } catch (error: any) {
+      console.log("Error while fetching menus--->", error);
+      setLoading(false);
+      throw error;
+    }
+  }
+
+  useEffect(() => {
+    getMenus().then((data) => {
+      setMenus(data);
+      setLoading(false);
+    }).catch((error) => {
+      alert(error.message);
+      setLoading(false);
+      console.log(error);
+    });
   }, []);
 
   const columns = [
@@ -28,7 +53,13 @@ const FoodMenu = () => {
       title: "Price",
       dataIndex: "price",
       key: "price",
-      render: (price: number) => `$${price.toFixed(2)}`,
+      render: (price: number) => `₹${price.toFixed(2)}`,
+    },
+    {
+      title: "Discounted Price",
+      dataIndex: "discountedPrice",
+      key: "discountedPrice",
+      render: (discountedPrice: number) => `₹${discountedPrice.toFixed(2)}`,
     },
     {
       title: "Category",
@@ -44,8 +75,8 @@ const FoodMenu = () => {
     {
       title: "Actions",
       key: "actions",
-      render: (_: any, record: MenuItem) => (
-        <Link href={`restaurant-owner/menu/${record._id}`}>
+      render: (_: any, record: IMenu) => (
+        <Link href={`/restaurant-owner/menu/${record._id}`}>
           <Button type="link">Edit</Button>
         </Link>
       ),
@@ -62,10 +93,10 @@ const FoodMenu = () => {
       </div>
       <Table
         columns={columns}
-        dataSource={menuItems}
+        dataSource={menus}
         rowKey="_id"
         loading={loading}
-        pagination={{ pageSize: 5 }}
+        pagination={{ pageSize: 10 }}
         className='mt-2'
       />
     </div >

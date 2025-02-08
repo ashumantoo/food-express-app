@@ -5,4 +5,5 @@ export const API_ENDPOINTS = {
   logout: `${baseUrl}/auth/logout`,
   user: `${baseUrl}/users`,
   restaurants: `${baseUrl}/restaurants`,
+  menu:`${baseUrl}/restaurant-owner/menu`
 }

@@ -1,6 +1,5 @@
 import { IAdress } from "@/models/user";
-import { ICreateRestaurantInput, IRestaurant, IUser, IUserLogin, IUserRegistration } from "./types";
-import { boolean } from "yup";
+import { ICreateRestaurantInput, IMenu, IRestaurant, IUser, IUserLogin, IUserRegistration } from "./types";
 
 export enum RoleTypeEnum {
   USER = "USER",
@@ -77,6 +76,17 @@ export const restaurantInitialValue: IRestaurant = {
   address: addressInitialValue
 }
 
+export const menuInitialValue: IMenu = {
+  _id: "",
+  name: "",
+  price: 0,
+  discountedPrice: 0,
+  category: "",
+  description: "",
+  imageUrl: "",
+  isAvailable: true
+}
+
 export const cuisinesOptions = [
   {
     label: "North Indian",
@@ -146,6 +156,23 @@ export const gender = [
   },
 ]
 
+export const menuCategories = [
+  {
+    label: "Veg",
+    value: "VEG"
+  },
+  {
+    label: "Non Veg",
+    value: "NON_VEG"
+  }
+];
+
+export enum MEDIA_FOLDER_NAME {
+  MENU = 'menu',
+  USERS = 'users',
+  RESTAURANTS = 'restaurants'
+}
+
 export function formatDate(date: string) {
   const dateString = new Date(date);
   const yyyy = dateString.getFullYear();
@@ -157,4 +184,27 @@ export function formatDate(date: string) {
 
   const formattedDate = dd + '/' + mm + '/' + yyyy;
   return formattedDate;
+}
+
+export const mediaUploader = async (files: File[], folderName: string) => {
+  const uploadedMediaUrls: string[] = [];
+  for (const file of files) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'stugahyi');
+    formData.append('cloud_name', 'ashumantoo');
+    formData.append('folder', `food-express-app/${folderName}`);
+
+    try {
+      const apiResponse = await fetch(`https://api.cloudinary.com/v1_1/ashumantoo/auto/upload`, {
+        method: 'POST',
+        body: formData
+      });
+      const res = await apiResponse.json();
+      uploadedMediaUrls.push(res.secure_url)
+    } catch (error) {
+      console.log("Error while uploading media to cloudinary", error);
+    }
+  }
+  return uploadedMediaUrls;
 }

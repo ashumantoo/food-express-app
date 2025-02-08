@@ -37,8 +37,8 @@ export async function POST(req: Request) {
       _user.id,
       user.email,
       `${user.firstName} ${user.lastName}`,
-      restaurantDoc._id || "",
-      _user.role
+      _user.role,
+      restaurantDoc._id || ""
     );
 
     const response = NextResponse.json({
