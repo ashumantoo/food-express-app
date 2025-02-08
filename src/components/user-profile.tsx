@@ -1,15 +1,15 @@
 'use client';
 import { API_ENDPOINTS } from '@/utils/api-endpoints';
-import { formatDate, gender, userInitialValue } from '@/utils/const';
+import { formatDate, gender, MEDIA_FOLDER_NAME, userInitialValue } from '@/utils/const';
 import { IUser } from '@/utils/types';
-import { DatePicker, Input, message, Select, Spin } from 'antd';
-import Image from 'next/image';
+import { DatePicker, Image, Input, message, Select, Spin } from 'antd';
 import React, { FC, useEffect, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { object, string, boolean } from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { DoubleRightOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
+import { UploadMedia } from './media-upload';
 
 const UserSchema = object({
   _id: string().optional().default(""),
@@ -38,7 +38,7 @@ const UserProfile: FC = () => {
   const [userEmail, setUserEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [submiting, setSubmiting] = useState(false);
-  const { control, reset, handleSubmit, formState: { errors } } = useForm<IUser>({
+  const { control, reset, handleSubmit, setValue, getValues, watch, formState: { errors } } = useForm<IUser>({
     defaultValues: { ...userInitialValue },
     resolver: yupResolver(UserSchema)
   });
@@ -132,8 +132,14 @@ const UserProfile: FC = () => {
         <div className='p-6 bg-white'>
           <div className='flex items-center justify-between'>
             <div className='flex items-center'>
-              <Image src={'/profile-pic.jpg'} height={100} width={100} alt='User Profile Image' />
-              <div>
+              <Image
+                src={getValues('profileImage') ? getValues('profileImage'): '/profile-pic.jpg'}
+                height={100}
+                width={100}
+                alt='User Profile Image'
+                className={'rounded-full'}
+              />
+              <div className='ml-4'>
                 <p className='text-lg'>{userFullName}</p>
                 <p className='text-blue-500'>{userEmail}</p>
               </div>
@@ -379,6 +385,16 @@ const UserProfile: FC = () => {
                 />
                 {errors.address && errors.address.zipcode && <p className='text-red-500 text-md'>{errors.address.zipcode.message}</p>}
               </div>
+            </div>
+            <div>
+              <h3 className='text-md font-bold mt-6 uppercase mb-2'>Upload Profile Image:</h3>
+              <UploadMedia
+                folderName={MEDIA_FOLDER_NAME.USERS}
+                getUploadedMediaUrls={(urls: string[]) => {
+                  setValue('profileImage', urls[0]);
+                  watch('profileImage');
+                }}
+              />
             </div>
           </form>
         </div>

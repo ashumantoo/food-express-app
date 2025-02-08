@@ -1,6 +1,7 @@
 'use client'
 import { API_ENDPOINTS } from '@/utils/api-endpoints';
 import { RoleTypeEnum } from '@/utils/const';
+import { LogoutOutlined, UserOutlined, UserSwitchOutlined } from '@ant-design/icons';
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -62,10 +63,14 @@ const Header = () => {
           <nav className='mr-4 flex items-center gap-4'>
             {!isAuthenticated && <Link href={'/login'} className='text-lg'>LogIn</Link>}
             {!isAuthenticated && <Link href={'/register'} className='text-lg'>Register</Link>}
-            {isAuthenticated && <Link href={userRole === RoleTypeEnum.USER ? '/profile' : '/restaurant-owner/settings'} className='text-lg'>{username}</Link>}
+            {isAuthenticated && <Link
+              href={userRole === RoleTypeEnum.USER ? '/profile' : '/restaurant-owner/settings'}
+              className={'hover:text-red-500 text-lg'}><UserOutlined style={{ fontSize: '120%',marginRight:4 }} />
+              {username}
+            </Link>}
             {isAuthenticated && userRole === RoleTypeEnum.USER && <Link href={'/cart'} className='text-lg'>Cart</Link>}
             {isAuthenticated && userRole === RoleTypeEnum.USER && <Link href={'/orders'} className='text-lg'>Orders</Link>}
-            {isAuthenticated && <button className='text-lg' onClick={handleLogout}>Logout</button>}
+            {isAuthenticated && <button className='text-lg hover:text-red-500' onClick={handleLogout}><LogoutOutlined /> Logout</button>}
           </nav>
         </div>
       </div>

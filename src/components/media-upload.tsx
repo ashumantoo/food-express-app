@@ -47,7 +47,7 @@ export const UploadMedia: FC<IProgs> = ({ folderName, getUploadedMediaUrls }) =>
   };
 
   return (
-    <>
+    <div>
       {contextHolder}
       <Upload
         {...props}
@@ -69,6 +69,6 @@ export const UploadMedia: FC<IProgs> = ({ folderName, getUploadedMediaUrls }) =>
       >
         {uploading ? 'Uploading' : 'Start Upload'}
       </Button>
-    </>
+    </div>
   )
 }

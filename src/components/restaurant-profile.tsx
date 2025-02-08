@@ -1,14 +1,14 @@
 'use client';
 import { API_ENDPOINTS } from '@/utils/api-endpoints';
-import { cuisinesOptions, restaurantInitialValue, workingDaysOptions } from '@/utils/const';
+import { cuisinesOptions, MEDIA_FOLDER_NAME, restaurantInitialValue, workingDaysOptions } from '@/utils/const';
 import { IRestaurant, IUser } from '@/utils/types';
-import { DatePicker, Input, message, Select, Spin } from 'antd';
-import Image from 'next/image';
+import { DatePicker, Input, message, Select, Spin, Image } from 'antd';
 import React, { FC, useEffect, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { object, string, boolean, array } from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { DoubleRightOutlined } from '@ant-design/icons';
+import { UploadMedia } from './media-upload';
 
 
 const RestaurantSchema = object({
@@ -39,7 +39,7 @@ const RestaurantProfile: FC = () => {
   const [restaurantEmail, setRestaurantEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [submiting, setSubmiting] = useState(false);
-  const { control, reset, handleSubmit, formState: { errors } } = useForm<IRestaurant>({
+  const { control, reset, handleSubmit, setValue, getValues, watch, formState: { errors } } = useForm<IRestaurant>({
     defaultValues: { ...restaurantInitialValue },
     resolver: yupResolver(RestaurantSchema)
   });
@@ -125,7 +125,13 @@ const RestaurantProfile: FC = () => {
         <div className='p-6 bg-white'>
           <div className='flex items-center justify-between'>
             <div className='flex items-center'>
-              <Image src={'/profile-pic.jpg'} height={100} width={100} alt='User Profile Image' />
+              <Image
+                src={getValues('restaurantImage') ? getValues('restaurantImage') : '/profile-pic.jpg'}
+                height={100}
+                width={100}
+                alt='User Profile Image'
+                className={'rounded-full'}
+              />
               <div>
                 <p className='text-lg'>{restaurantName}</p>
                 <p className='text-blue-500'>{restaurantEmail}</p>
@@ -420,6 +426,16 @@ const RestaurantProfile: FC = () => {
                 />
                 {errors.address && errors.address.zipcode && <p className='text-red-500 text-md'>{errors.address.zipcode.message}</p>}
               </div>
+            </div>
+            <div>
+              <h3 className='text-md font-bold mt-6 uppercase mb-2'>Upload Restaurant Image:</h3>
+              <UploadMedia
+                folderName={MEDIA_FOLDER_NAME.USERS}
+                getUploadedMediaUrls={(urls: string[]) => {
+                  setValue('restaurantImage', urls[0]);
+                  watch('restaurantImage');
+                }}
+              />
             </div>
           </form>
         </div>
