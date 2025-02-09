@@ -37,7 +37,7 @@ const FoodMenuMutation = () => {
     try {
       setSubmiting(true);
       const { _id, ...rest } = data;
-      const url = id ? `${API_ENDPOINTS.menu}/${id}` : `${API_ENDPOINTS.menu}`;
+      const url = id ? `${API_ENDPOINTS.restaurant_owner.menu}/${id}` : `${API_ENDPOINTS.restaurant_owner.menu}`;
       const apiResponse = await fetch(url, {
         method: id ? 'PUT' : 'POST',
         headers: { "Content-Type": "application/json" },
@@ -76,7 +76,7 @@ const FoodMenuMutation = () => {
   const getMenuById = async (id: string) => {
     try {
       setLoading(true);
-      const apiResponse = await fetch(`${API_ENDPOINTS.menu}/${id}`, {
+      const apiResponse = await fetch(`${API_ENDPOINTS.restaurant_owner.menu}/${id}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });

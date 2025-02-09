@@ -1,4 +1,5 @@
 import { IAdress } from "@/models/user";
+import { CuisinesEnum, MenuCategoriesEnum } from "./const";
 
 export interface IUserRegistration extends IUserLogin {
   firstName: string;
@@ -34,7 +35,6 @@ export interface IUser {
   profileImage: string
   address: IAdress;
   role: string;
-  restaurant: string;
   isActive: boolean;
 }
 
@@ -46,7 +46,7 @@ export interface IRestaurant {
   registrationNumber: string;
   address: IAdress;
   restaurantImage: string;
-  cuisines: string[];
+  cuisines: CuisinesEnum[];
   openingHours: string;
   closingHours: string;
   workingDays: string[];
@@ -59,7 +59,7 @@ export interface IMenu {
   name: string;
   price: number;
   discountedPrice: number;
-  category: string;
+  category: MenuCategoriesEnum;
   description: string;
   isAvailable: boolean;
   imageUrl: string;

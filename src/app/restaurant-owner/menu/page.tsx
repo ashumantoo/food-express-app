@@ -1,10 +1,12 @@
 'use client'
 import React from 'react';
 import { useEffect, useState } from "react";
-import { Table, Button } from "antd";
+import { Table, Button, Image } from "antd";
 import Link from "next/link";
 import { IMenu } from '@/utils/types';
 import { API_ENDPOINTS } from '@/utils/api-endpoints';
+import { MenuCategoriesEnum, MenuCategoriesValue } from '@/utils/const';
+import { DeleteFilled, DeleteOutlined, EditFilled, EditOutlined } from '@ant-design/icons';
 
 const FoodMenu = () => {
   const [menus, setMenus] = useState<IMenu[]>([]);
@@ -13,7 +15,7 @@ const FoodMenu = () => {
   const getMenus = async () => {
     try {
       setLoading(true);
-      const apiResponse = await fetch(`${API_ENDPOINTS.menu}`, {
+      const apiResponse = await fetch(`${API_ENDPOINTS.restaurant_owner.menu}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -45,6 +47,12 @@ const FoodMenu = () => {
 
   const columns = [
     {
+      title: "Image",
+      dataIndex: "imageUrl",
+      key: "imageUrl",
+      render: (imageUrl: string) => (<Image src={imageUrl} height={50} width={50} />)
+    },
+    {
       title: "Name",
       dataIndex: "name",
       key: "name",
@@ -65,6 +73,9 @@ const FoodMenu = () => {
       title: "Category",
       dataIndex: "category",
       key: "category",
+      render: (category: MenuCategoriesEnum) => (
+        <span className={`px-4 py-1 rounded-md shadow-md ${category === MenuCategoriesEnum.VEG ? 'bg-green-300' : 'bg-red-300'}`}>{MenuCategoriesValue[category]}</span>
+      )
     },
     {
       title: "Available",
@@ -76,9 +87,13 @@ const FoodMenu = () => {
       title: "Actions",
       key: "actions",
       render: (_: any, record: IMenu) => (
-        <Link href={`/restaurant-owner/menu/${record._id}`}>
-          <Button type="link">Edit</Button>
-        </Link>
+        <div>
+          <Link href={`/restaurant-owner/menu/${record._id}`}>
+            <button className='text-blue-500' title='Edit'><EditFilled className='text-lg' /></button>
+          </Link>
+          <button className='ml-4 text-red-400' title='Delete'><DeleteFilled className='text-lg' /></button>
+        </div>
+
       ),
     },
   ];

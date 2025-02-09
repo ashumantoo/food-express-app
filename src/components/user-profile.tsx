@@ -28,7 +28,6 @@ const UserSchema = object({
     country: string().required(),
     zipcode: string().required().min(6).max(6)
   }),
-  restaurant: string().required(),
   isActive: boolean().required()
 }).required();
 
@@ -133,7 +132,7 @@ const UserProfile: FC = () => {
           <div className='flex items-center justify-between'>
             <div className='flex items-center'>
               <Image
-                src={getValues('profileImage') ? getValues('profileImage'): '/profile-pic.jpg'}
+                src={getValues('profileImage') ? getValues('profileImage') : '/profile-pic.jpg'}
                 height={100}
                 width={100}
                 alt='User Profile Image'

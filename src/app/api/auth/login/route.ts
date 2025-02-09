@@ -30,7 +30,7 @@ export async function POST(req: Request) {
       lastName: user.lastName,
       email: user.email,
       role: user.role,
-      restaurantId: restaurantDoc._id
+      restaurantId: restaurantDoc ? restaurantDoc._id : null
     };
 
     await createSession(
@@ -38,7 +38,7 @@ export async function POST(req: Request) {
       user.email,
       `${user.firstName} ${user.lastName}`,
       _user.role,
-      restaurantDoc._id || ""
+      restaurantDoc ? restaurantDoc._id : null
     );
 
     const response = NextResponse.json({

@@ -52,7 +52,7 @@ const Header = () => {
     <>
       <div className="h-16 px-8">
         <div className='flex items-center justify-between'>
-          <Link href={userRole === RoleTypeEnum.USER ? '/' : '/restaurant-owner'}>
+          <Link href={!userRole ? "/" : userRole === RoleTypeEnum.USER ? '/' : '/restaurant-owner'}>
             <Image
               src="/logo.png"
               alt='Company Logo'
@@ -65,11 +65,11 @@ const Header = () => {
             {!isAuthenticated && <Link href={'/register'} className='text-lg'>Register</Link>}
             {isAuthenticated && <Link
               href={userRole === RoleTypeEnum.USER ? '/profile' : '/restaurant-owner/settings'}
-              className={'hover:text-red-500 text-lg'}><UserOutlined style={{ fontSize: '120%',marginRight:4 }} />
+              className={'hover:text-red-500 text-lg'}><UserOutlined style={{ fontSize: '120%', marginRight: 4 }} />
               {username}
             </Link>}
-            {isAuthenticated && userRole === RoleTypeEnum.USER && <Link href={'/cart'} className='text-lg'>Cart</Link>}
-            {isAuthenticated && userRole === RoleTypeEnum.USER && <Link href={'/orders'} className='text-lg'>Orders</Link>}
+            {isAuthenticated && userRole === RoleTypeEnum.USER && <Link href={'/cart'} className='text-lg hover:text-red-500'>Cart</Link>}
+            {isAuthenticated && userRole === RoleTypeEnum.USER && <Link href={'/orders'} className='text-lg hover:text-red-500'>Orders</Link>}
             {isAuthenticated && <button className='text-lg hover:text-red-500' onClick={handleLogout}><LogoutOutlined /> Logout</button>}
           </nav>
         </div>

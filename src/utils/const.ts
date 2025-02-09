@@ -54,7 +54,6 @@ export const userInitialValue: IUser = {
   dob: "",
   gender: "",
   profileImage: "",
-  restaurant: "",
   address: addressInitialValue,
   isActive: true,
   role: RoleTypeEnum.USER
@@ -76,12 +75,35 @@ export const restaurantInitialValue: IRestaurant = {
   address: addressInitialValue
 }
 
+export const menuCategories = [
+  {
+    label: "Veg",
+    value: "VEG"
+  },
+  {
+    label: "Non Veg",
+    value: "NON_VEG"
+  }
+];
+
+export enum MenuCategoriesEnum {
+  VEG = "VEG",
+  NON_VEG = "NON_VEG"
+}
+
+export const MenuCategoriesValue: {
+  [key in MenuCategoriesEnum]: string
+} = {
+  VEG: "Veg",
+  NON_VEG: "Non Veg"
+}
+
 export const menuInitialValue: IMenu = {
   _id: "",
   name: "",
   price: 0,
   discountedPrice: 0,
-  category: "",
+  category: MenuCategoriesEnum.VEG,
   description: "",
   imageUrl: "",
   isAvailable: true
@@ -108,7 +130,37 @@ export const cuisinesOptions = [
     label: "Chaines",
     value: "CHAINES"
   },
+  {
+    label: "Cake",
+    value: "CAKE"
+  },
+  {
+    label: "Sweets",
+    value: "SWEETS"
+  },
 ]
+
+export enum CuisinesEnum {
+  NORTH_INDIAN = 'NORTH_INDIAN',
+  SOUTH_INDIAN = 'SOUTH_INDIAN',
+  BIRYANI = 'BIRYANI',
+  PIZZA = 'PIZZA',
+  CHAINES = 'CHAINES',
+  CAKE = 'CAKE',
+  SWEETS = 'SWEETS',
+}
+
+export const CuisinesEnumValue: {
+  [key in CuisinesEnum]: string
+} = {
+  NORTH_INDIAN: 'North Indian',
+  SOUTH_INDIAN: 'South Indian',
+  BIRYANI: "Biryani",
+  PIZZA: 'Pizza',
+  CHAINES: 'Chaines',
+  CAKE: 'Cake',
+  SWEETS: 'Sweets'
+}
 
 export const workingDaysOptions = [
   {
@@ -155,17 +207,6 @@ export const gender = [
     value: "OTHER"
   },
 ]
-
-export const menuCategories = [
-  {
-    label: "Veg",
-    value: "VEG"
-  },
-  {
-    label: "Non Veg",
-    value: "NON_VEG"
-  }
-];
 
 export enum MEDIA_FOLDER_NAME {
   MENU = 'menu',

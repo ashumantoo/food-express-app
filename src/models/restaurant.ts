@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document, ObjectId } from "mongoose";
 import { IAdress } from "./user";
 
+//TODO: Add delivery time
 export interface IRestaurantModel extends Document {
   name: string;
   email: string;
