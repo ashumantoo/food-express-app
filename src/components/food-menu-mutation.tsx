@@ -1,12 +1,12 @@
 'use client'
-import { MEDIA_FOLDER_NAME, menuCategories, menuInitialValue } from '@/utils/const';
+import { MEDIA_FOLDER_NAME, menuCategories, MenuCategoriesEnum, menuInitialValue } from '@/utils/const';
 import { IMenu } from '@/utils/types';
 import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, GetProp, Input, message, Select, Switch, Upload, UploadFile, UploadProps, Image, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { boolean, number, object, string } from 'yup';
+import { boolean, mixed, number, object, string } from 'yup';
 import { UploadMedia } from './media-upload';
 import { API_ENDPOINTS } from '@/utils/api-endpoints';
 import { useParams, useRouter } from 'next/navigation';
@@ -16,7 +16,7 @@ const MenuSchema = object({
   name: string().required(),
   price: number().required().min(1),
   discountedPrice: number().default(0),
-  category: string().required(),
+  category: string().oneOf([MenuCategoriesEnum.VEG, MenuCategoriesEnum.NON_VEG]).required(),
   description: string().optional().default(""),
   isAvailable: boolean().required(),
   imageUrl: string().optional().default("")

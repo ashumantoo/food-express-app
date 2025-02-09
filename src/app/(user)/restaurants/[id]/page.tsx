@@ -1,13 +1,14 @@
 import Header from '@/components/header'
+import RestaurantDetails from '@/components/restaurant-details'
 import React from 'react'
 
-function RestaurantDetails() {
+function RestaurantDetailsPage() {
   return (
     <div>
       <Header />
-      RestaurantDetails
+      <RestaurantDetails />
     </div>
   )
 }
 
-export default RestaurantDetails
+export default RestaurantDetailsPage

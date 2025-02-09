@@ -64,3 +64,8 @@ export interface IMenu {
   isAvailable: boolean;
   imageUrl: string;
 }
+
+export interface IRestaurantDetails {
+  restaurant: IRestaurant,
+  menus: IMenu[]
+}

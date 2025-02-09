@@ -1,11 +1,15 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import RestaurantCard from './restaurant-card';
 import { IRestaurant } from '@/utils/types';
 import { API_ENDPOINTS } from '@/utils/api-endpoints';
 import { message, Spin } from 'antd';
 
-const PopularRestaurants = () => {
+interface IProps {
+  limit?: number;
+}
+
+const AllRestaurants: FC<IProps> = ({ limit }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [popularRestaurants, setPopularRestaurants] = useState<IRestaurant[]>([]);
   const [loading, setLoading] = useState(false);
@@ -26,7 +30,7 @@ const PopularRestaurants = () => {
         throw new Error(jsonResponse.message);
       }
     } catch (error: any) {
-      console.log("Error while fetching user--->", error);
+      console.log("Error while fetching popular restaurants--->", error);
       setLoading(false);
       throw error;
     }
@@ -50,7 +54,7 @@ const PopularRestaurants = () => {
     <div>
       {contextHolder}
       {loading ? <Spin /> : (
-        <div className='flex items-start gap-4 mt-4'>
+        <div className='grid grid-cols-4 gap-y-8 mt-4'>
           {popularRestaurants.map((restaurant) => {
             return <RestaurantCard restaurant={restaurant} key={restaurant._id} />
           })}
@@ -60,4 +64,4 @@ const PopularRestaurants = () => {
   )
 }
 
-export default PopularRestaurants
+export default AllRestaurants

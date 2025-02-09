@@ -3,7 +3,7 @@ import HeroComponent from "../components/hero";
 import { CuisinesEnum, CuisinesEnumValue } from "@/utils/const";
 import { Image } from "antd";
 import Link from "next/link";
-import PopularRestaurants from "@/components/popular-restaurants";
+import PopularRestaurants from "@/components/all-restaurants";
 import PopularMeals from "@/components/popular-meals";
 
 export default function Home() {
@@ -71,7 +71,7 @@ export default function Home() {
             <Link href={'/restaurants'} className="bg-red-500 text-white px-4 py-1 hover:scale-105">View All</Link>
           </div>
           <hr className="mt-2" />
-          <PopularRestaurants />
+          <PopularRestaurants limit={5} />
         </div>
       </div>
       <div className="my-12">

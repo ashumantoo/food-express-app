@@ -9,7 +9,7 @@ interface IProps {
 
 const RestaurantCard: FC<IProps> = ({ restaurant }) => {
   return (
-    <Link href={`/restaurants/${restaurant._id}`} className="bg-white rounded-2xl shadow-lg overflow-hidden w-72 transition-transform duration-300 transform hover:scale-105 hover:shadow-2xl">
+    <Link href={`/restaurants/${restaurant._id}`} className="bg-white rounded-2xl shadow-lg overflow-hidden w-64 transition-transform duration-300 transform hover:scale-105 hover:shadow-2xl">
       <img src={restaurant.restaurantImage} alt={restaurant.name} className="w-full h-40 object-cover" />
       <div className="p-4">
         <h2 className="text-xl font-semibold">{restaurant.name}</h2>
