@@ -1,6 +1,5 @@
 import { MenuCategoriesEnum, MenuCategoriesValue } from '@/utils/const';
 import { IMenu } from '@/utils/types';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { FC, useEffect } from 'react';
 

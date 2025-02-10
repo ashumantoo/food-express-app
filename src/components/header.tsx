@@ -68,7 +68,9 @@ const Header = () => {
               className={'hover:text-red-500 text-lg'}><UserOutlined style={{ fontSize: '120%', marginRight: 4 }} />
               {username}
             </Link>}
-            {isAuthenticated && userRole === RoleTypeEnum.USER && <Link href={'/cart'} className='text-lg hover:text-red-500'>Cart</Link>}
+            {isAuthenticated && userRole === RoleTypeEnum.USER && <Link href={'/cart'} className='text-lg hover:text-red-500'>
+              Cart <span className='bg-red-500 text-white px-1'>5</span>
+            </Link>}
             {isAuthenticated && userRole === RoleTypeEnum.USER && <Link href={'/orders'} className='text-lg hover:text-red-500'>Orders</Link>}
             {isAuthenticated && <button className='text-lg hover:text-red-500' onClick={handleLogout}><LogoutOutlined /> Logout</button>}
           </nav>

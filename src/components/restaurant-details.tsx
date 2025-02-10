@@ -1,14 +1,15 @@
 'use client'
 import { API_ENDPOINTS } from '@/utils/api-endpoints';
 import { CuisinesEnumValue, MenuCategoriesEnum, MenuCategoriesValue } from '@/utils/const';
-import { IRestaurantDetails } from '@/utils/types';
-import { GlobalOutlined } from '@ant-design/icons';
+import { IMenu, IRestaurantDetails } from '@/utils/types';
+import { GlobalOutlined, TagFilled } from '@ant-design/icons';
 import { Image, message, Spin } from 'antd';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import MealCard from './meal-card';
 
 const RestaurantDetails = () => {
+  const router = useRouter()
   const { id } = useParams();
   const [messageApi, contextHolder] = message.useMessage();
   const [restaurantDetails, setRestaurantDetails] = useState<IRestaurantDetails>();
@@ -33,6 +34,17 @@ const RestaurantDetails = () => {
       console.log("Error while fetching popular restaurants--->", error);
       setLoading(false);
       throw error;
+    }
+  }
+
+  const handleAddToCart = (meal: IMenu) => {
+    const user = localStorage.getItem('user');
+    if (!user) {
+      router.push('/login')
+    } else {
+      const cartItem = {
+
+      }
     }
   }
 
@@ -67,7 +79,9 @@ const RestaurantDetails = () => {
                   <div>
                     <span className={`text-white font-semibold px-1 py-0.5 ${menu.category === MenuCategoriesEnum.VEG ? 'bg-green-700' : 'bg-red-700'}`}>{MenuCategoriesValue[menu.category]}</span>
                     <p className='text-lg font-bold'>{menu.name}</p>
-                    <p> <span className='line-through opacity-40 font-medium'>₹{menu.price}</span> <span className='font-medium'>₹{menu.discountedPrice}</span></p>
+                    <p> <span className='line-through opacity-40 font-medium'>₹{menu.price}</span> <span className='font-medium'>₹{menu.discountedPrice}</span> <span>
+                      <TagFilled className='text-green-700' />
+                    </span></p>
                     <p className='mt-2 text-base opacity-70'>{menu.description}</p>
                   </div>
                   <div>
@@ -75,7 +89,7 @@ const RestaurantDetails = () => {
                       <Image className='block' src={menu.imageUrl} height={120} width={140} alt={menu.name} />
                     </div>
                     <div className='text-center'>
-                      <button className='bg-red-500 w-full text-white rounded-xl py-1 font-bold uppercase mt-1 hover:bg-red-600'>Add</button>
+                      <button className='bg-red-500 w-full text-white rounded-xl py-1 font-bold uppercase mt-1 hover:bg-red-600' onClick={() => handleAddToCart(menu)}>Add</button>
                     </div>
                   </div>
                 </div>

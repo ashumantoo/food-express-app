@@ -55,7 +55,7 @@ const RestaurantProfile: FC = () => {
       const jsonResponse = await apiResponse.json();
       if (jsonResponse.success) {
         setLoading(false)
-        return jsonResponse.data;
+        return jsonResponse.data.restaurant;
       } else {
         setLoading(false)
         alert(jsonResponse.message);
