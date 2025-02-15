@@ -1,4 +1,5 @@
 'use client'
+import { useCart } from '@/context/cart-context';
 import { API_ENDPOINTS } from '@/utils/api-endpoints';
 import { RoleTypeEnum } from '@/utils/const';
 import { LogoutOutlined, UserOutlined, UserSwitchOutlined } from '@ant-design/icons';
@@ -12,6 +13,7 @@ const Header = () => {
   const [username, setUsername] = useState("");
   const [userRole, setUserRole] = useState("");
   const router = useRouter();
+  const { cartCount } = useCart();
 
   useEffect(() => {
     const user = localStorage.getItem('user');
@@ -69,7 +71,7 @@ const Header = () => {
               {username}
             </Link>}
             {isAuthenticated && userRole === RoleTypeEnum.USER && <Link href={'/cart'} className='text-lg hover:text-red-500'>
-              Cart <span className='bg-red-500 text-white px-1'>5</span>
+              Cart <span className='bg-red-500 text-white px-1'>{cartCount}</span>
             </Link>}
             {isAuthenticated && userRole === RoleTypeEnum.USER && <Link href={'/orders'} className='text-lg hover:text-red-500'>Orders</Link>}
             {isAuthenticated && <button className='text-lg hover:text-red-500' onClick={handleLogout}><LogoutOutlined /> Logout</button>}

@@ -8,6 +8,7 @@ export const API_ENDPOINTS = {
   user: `${baseUrl}/users`,
   restaurants: `${baseUrl}/restaurants`,
   meals: `${baseUrl}/meals`,
+  cart: `${baseUrl}/cart`,
   restaurant_owner: {
     menu: `${baseUrl}/restaurant-owner/menu`
   }

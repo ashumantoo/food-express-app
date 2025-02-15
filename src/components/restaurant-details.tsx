@@ -2,18 +2,20 @@
 import { API_ENDPOINTS } from '@/utils/api-endpoints';
 import { CuisinesEnumValue, MenuCategoriesEnum, MenuCategoriesValue } from '@/utils/const';
 import { IMenu, IRestaurantDetails } from '@/utils/types';
-import { GlobalOutlined, TagFilled } from '@ant-design/icons';
+import { GlobalOutlined, MinusOutlined, PlusOutlined, TagFilled } from '@ant-design/icons';
 import { Image, message, Spin } from 'antd';
 import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import MealCard from './meal-card';
+import { useCart } from '@/context/cart-context';
 
 const RestaurantDetails = () => {
   const router = useRouter()
   const { id } = useParams();
   const [messageApi, contextHolder] = message.useMessage();
   const [restaurantDetails, setRestaurantDetails] = useState<IRestaurantDetails>();
+  const [currentRestaurantId, setCurrentReataurantId] = useState("");
   const [loading, setLoading] = useState(false);
+  const { addToCart, removeFromCart, cartItems } = useCart();
 
   const getRestaurantDetails = async (id: string) => {
     try {
@@ -42,14 +44,53 @@ const RestaurantDetails = () => {
     if (!user) {
       router.push('/login')
     } else {
-      const cartItem = {
-
+      if (currentRestaurantId) {
+        addToCart({
+          restaurant: currentRestaurantId,
+          foodItem: meal._id,
+          quantity: 1,
+          price: meal.discountedPrice,
+          isRemoving: false
+        })
       }
     }
   }
 
+  // Increase quantity
+  const handleIncrease = (meal: IMenu) => {
+    const cartItem = cartItems.find((ci: any) => ci.foodItem._id === meal._id);
+    if (cartItem && currentRestaurantId) {
+      addToCart({
+        restaurant: currentRestaurantId,
+        foodItem: meal._id,
+        quantity: cartItem.quantity + 1,
+        price: meal.discountedPrice,
+        isRemoving: false
+      });
+    }
+  };
+
+  // Decrease quantity
+  const handleDecrease = (meal: IMenu) => {
+    const cartItem = cartItems.find((ci: any) => ci.foodItem._id === meal._id);
+    if (cartItem && currentRestaurantId) {
+      if (cartItem.quantity > 1) {
+        addToCart({
+          restaurant: currentRestaurantId,
+          foodItem: meal._id,
+          quantity: cartItem.quantity - 1,
+          price: meal.discountedPrice,
+          isRemoving: false
+        });
+      } else {
+        removeFromCart(meal._id, meal.discountedPrice, false);
+      }
+    }
+  };
+
   useEffect(() => {
     if (id && typeof id === 'string') {
+      setCurrentReataurantId(id);
       getRestaurantDetails(id).then((data) => {
         setRestaurantDetails(data);
         setLoading(false);
@@ -73,29 +114,52 @@ const RestaurantDetails = () => {
           <h3 className='mt-12 text-xl font-semibold'>Browse Restaurant's Menus</h3>
           <hr className='mt-2' />
           <div className='mt-2'>
-            {restaurantDetails?.menus.map((menu) => (
-              <div key={menu._id}>
-                <div className='w-full my-4 p-4 flex items-center justify-between gap-4'>
-                  <div>
-                    <span className={`text-white font-semibold px-1 py-0.5 ${menu.category === MenuCategoriesEnum.VEG ? 'bg-green-700' : 'bg-red-700'}`}>{MenuCategoriesValue[menu.category]}</span>
-                    <p className='text-lg font-bold'>{menu.name}</p>
-                    <p> <span className='line-through opacity-40 font-medium'>₹{menu.price}</span> <span className='font-medium'>₹{menu.discountedPrice}</span> <span>
-                      <TagFilled className='text-green-700' />
-                    </span></p>
-                    <p className='mt-2 text-base opacity-70'>{menu.description}</p>
-                  </div>
-                  <div>
+            {restaurantDetails?.menus.map((menu) => {
+              const cartItem = cartItems.find((ci: any) => ci.foodItem._id === menu._id);
+
+              return (
+                <div key={menu._id}>
+                  <div className='w-full my-4 p-4 flex items-center justify-between gap-4'>
                     <div>
-                      <Image className='block' src={menu.imageUrl} height={120} width={140} alt={menu.name} />
+                      <span className={`text-white font-semibold px-1 py-0.5 ${menu.category === MenuCategoriesEnum.VEG ? 'bg-green-700' : 'bg-red-700'}`}>{MenuCategoriesValue[menu.category]}</span>
+                      <p className='text-lg font-bold'>{menu.name}</p>
+                      <p> <span className='line-through opacity-40 font-medium'>₹{menu.price}</span> <span className='font-medium'>₹{menu.discountedPrice}</span> <span>
+                        <TagFilled className='text-green-700' />
+                      </span></p>
+                      <p className='mt-2 text-base opacity-70'>{menu.description}</p>
                     </div>
-                    <div className='text-center'>
-                      <button className='bg-red-500 w-full text-white rounded-xl py-1 font-bold uppercase mt-1 hover:bg-red-600' onClick={() => handleAddToCart(menu)}>Add</button>
+                    <div>
+                      <div>
+                        <Image className='block' src={menu.imageUrl} height={120} width={140} alt={menu.name} />
+                      </div>
+                      <div className='text-center'>
+                        {cartItem ? (
+                          // If item is in cart, show increase/decrease buttons
+                          <div className='bg-red-500 w-full text-white rounded-xl py-1 font-bold uppercase mt-1 hover:bg-red-600 flex justify-evenly items-center'>
+                            <button onClick={() => handleDecrease(menu)}>
+                              <MinusOutlined />
+                            </button>
+                            <span>{cartItem.quantity}</span>
+                            <button onClick={() => handleIncrease(menu)}>
+                              <PlusOutlined />
+                            </button>
+                          </div>
+                        ) : (
+                          // If item is not in cart, show "Add" button
+                          <button
+                            className='bg-red-500 w-full text-white rounded-xl py-1 font-bold uppercase mt-1 hover:bg-red-600'
+                            onClick={() => handleAddToCart(menu)}
+                          >
+                            Add
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
+                  <hr />
                 </div>
-                <hr />
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       )}
