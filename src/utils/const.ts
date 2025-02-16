@@ -162,6 +162,34 @@ export const CuisinesEnumValue: {
   SWEETS: 'Sweets'
 }
 
+export enum PaymentMethodEnum {
+  COD = "COD",
+  ONLINE = "ONLINE"
+}
+
+export const PaymentMethodEnumValue: {
+  [key in PaymentMethodEnum]: string
+} = {
+  COD: "Cash",
+  ONLINE: "Online"
+}
+
+export enum OrderStatusEnum {
+  PENDING = "PENDING",
+  PROCESSING = "PROCESSING",
+  DELIVERED = "DELIVERED",
+  CANCELLED = "CANCELLED"
+}
+
+export const OrderStatusEnumValue: {
+  [key in OrderStatusEnum]: string
+} = {
+  PENDING: "Pending",
+  PROCESSING: "Processing",
+  DELIVERED: 'Delivred',
+  CANCELLED: 'Cancelled'
+}
+
 export const workingDaysOptions = [
   {
     label: "Monday",

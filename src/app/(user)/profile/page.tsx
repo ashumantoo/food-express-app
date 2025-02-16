@@ -6,7 +6,7 @@ const UserProfilePage = () => {
   return (
     <div>
       <Header />
-      <div className='w-3/4 mx-auto mb-8 border border-gray-300 shadow-lg'>
+      <div className='w-3/4 mx-auto mb-8 mt-8 border shadow-lg'>
         <UserProfile />
       </div>
     </div>

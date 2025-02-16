@@ -84,6 +84,7 @@ export async function DELETE(req: NextRequest) {
   if (!cart) return NextResponse.json({ success: false, message: "Cart not found" }, { status: 404 });
   if (deleteCart) {
     await Cart.findOneAndDelete({ user });
+    return NextResponse.json({ success: true, message: "Cart deleted successfully" });
   } else {
     cart.items = cart.items.filter((item: ICartItemModel) => item.foodItem.toString() !== foodItem);
     cart.totalPrice -= price;

@@ -128,7 +128,7 @@ const UserProfile: FC = () => {
         Update Your Profile
       </h3> */}
       {!loading ? (
-        <div className='p-6 bg-white'>
+        <div className='p-12 bg-white'>
           <div className='flex items-center justify-between'>
             <div className='flex items-center'>
               <Image

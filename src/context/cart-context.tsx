@@ -20,10 +20,12 @@ export interface IAddItemToCart {
 interface ICartContextType {
   cartItems: ICartItem[],
   cartCount: number;
+  totalPrice: number;
   restauratnInCart: IRestaurant,
   addToCart: (args: IAddItemToCart) => Promise<void>;
   removeFromCart: (foodItem: string, price: number, deleteCart: boolean) => Promise<void>;
   fetchCart: () => Promise<void>;
+  clearCart: () => Promise<void>;
 }
 
 const CartContext = createContext<ICartContextType | undefined>(undefined);
@@ -31,6 +33,7 @@ const CartContext = createContext<ICartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cartItems, setCartItems] = useState<ICartItem[]>([]);
   const [cartCount, setCartCount] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
   const [restauratnInCart, setRestaurantInCart] = useState(restaurantInitialValue);
 
   // Fetch cart from API
@@ -44,6 +47,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         if (jsonResponse.data && jsonResponse.data.items) {
           setCartItems(jsonResponse.data.items);
           setCartCount(jsonResponse.data.items?.reduce((sum: number, item: ICartItem) => sum + item.quantity, 0) || 0);
+          setTotalPrice(jsonResponse.data.totalPrice);
           setRestaurantInCart(jsonResponse.data.restaurant);
         }
       } catch (error) {
@@ -100,13 +104,45 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+
+  const clearCart = async () => {
+    try {
+      const user = localStorage.getItem('user');
+      const { id: userId } = user ? JSON.parse(user) : "";
+      if (!userId) {
+        throw new Error("User not found while add item to cart");
+      }
+      const res = await fetch(`${API_ENDPOINTS.cart}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user: userId, deleteCart: true }),
+      });
+
+      const jsonResposne = await res.json();
+      if (jsonResposne.success) {
+        await fetchCart();
+      }
+    } catch (error) {
+      console.error("Error on clear cart:", error);
+    }
+  }
+
   useEffect(() => {
     fetchCart();
   }, []);
 
 
   return (
-    <CartContext.Provider value={{ cartItems, cartCount, addToCart, removeFromCart, fetchCart, restauratnInCart }}>
+    <CartContext.Provider value={{
+      cartItems,
+      cartCount,
+      totalPrice,
+      addToCart,
+      removeFromCart,
+      fetchCart,
+      restauratnInCart,
+      clearCart
+    }}>
       {children}
     </CartContext.Provider>
   );

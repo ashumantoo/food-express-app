@@ -9,6 +9,7 @@ export const API_ENDPOINTS = {
   restaurants: `${baseUrl}/restaurants`,
   meals: `${baseUrl}/meals`,
   cart: `${baseUrl}/cart`,
+  orders: `${baseUrl}/orders`,
   restaurant_owner: {
     menu: `${baseUrl}/restaurant-owner/menu`
   }

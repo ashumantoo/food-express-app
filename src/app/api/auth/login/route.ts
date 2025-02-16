@@ -29,6 +29,8 @@ export async function POST(req: Request) {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
+      mobile: user.mobile,
+      address: user.address,
       role: user.role,
       restaurantId: restaurantDoc ? restaurantDoc._id : null
     };

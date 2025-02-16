@@ -1,5 +1,5 @@
 import { IAdress } from "@/models/user";
-import { CuisinesEnum, MenuCategoriesEnum } from "./const";
+import { CuisinesEnum, MenuCategoriesEnum, OrderStatusEnum, PaymentMethodEnum } from "./const";
 
 export interface IUserRegistration extends IUserLogin {
   firstName: string;
@@ -68,4 +68,35 @@ export interface IMenu {
 export interface IRestaurantDetails {
   restaurant: IRestaurant,
   menus: IMenu[]
+}
+
+export interface IOrderItem {
+  foodItem: string;
+  quantity: number;
+  price: number;
+}
+
+export interface ICreateOrder {
+  user: string;
+  restaurant: string;
+  items: IOrderItem[];
+  totalPrice: number;
+  address: string;
+  phone: string;
+  paymentMethod: PaymentMethodEnum;
+  status: OrderStatusEnum;
+}
+
+export interface IUserOrderItem {
+  foodItem: IMenu;
+  quantity: number;
+}
+
+export interface IUserOrder {
+  _id: string;
+  totalPrice: number;
+  paymentMethod: PaymentMethodEnum;
+  address: string;
+  status: OrderStatusEnum;
+  items: IUserOrderItem[];
 }

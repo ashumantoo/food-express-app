@@ -140,6 +140,7 @@ const CartPage = () => {
           columns={columns}
           rowKey={(record: any) => record.foodItem._id}
           pagination={false}
+          className='shadow-lg'
         />
 
         {/* Total & Place Order */}

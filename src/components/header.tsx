@@ -78,7 +78,7 @@ const Header = () => {
           </nav>
         </div>
       </div>
-      <div className='h-0.5 bg-red-500'></div>
+      <div className='bg-red-500' style={{ height: 1 }}></div>
     </>
   )
 }
