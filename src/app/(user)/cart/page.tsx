@@ -5,6 +5,7 @@ import React from 'react'
 import { MinusOutlined, PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Image, Table, message } from "antd";
 import { useRouter } from "next/navigation";
+import Link from 'next/link';
 
 const CartPage = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -122,35 +123,42 @@ const CartPage = () => {
     <div className='h-screen'>
       {contextHolder}
       <Header />
-      <div className="w-3/5 mx-auto my-10">
-        <div className='flex items-center justify-between mb-2'>
-          <h2 className="text-2xl font-bold mb-4">Your Cart</h2>
-          <div className='flex items-center gap-2 cursor-pointer' onClick={() => { router.push(`/restaurants/${restauratnInCart._id}`) }}>
-            {restauratnInCart && restauratnInCart.restaurantImage && (
-              <Image src={restauratnInCart.restaurantImage} width={40} height={40} alt={restauratnInCart.name} preview={false} />
-            )}
-            <div>
-              <p className='font-bold text-lg'>{restauratnInCart.name}</p>
-              <p className='font-normal text-sm'>{restauratnInCart.address.street}</p>
+      {cartItems && cartItems.length ? (
+        <div className="w-3/5 mx-auto my-10">
+          <div className='flex items-center justify-between mb-2'>
+            <h2 className="text-2xl font-bold mb-4">Your Cart</h2>
+            <div className='flex items-center gap-2 cursor-pointer' onClick={() => { router.push(`/restaurants/${restauratnInCart._id}`) }}>
+              {restauratnInCart && restauratnInCart.restaurantImage && (
+                <Image src={restauratnInCart.restaurantImage} width={40} height={40} alt={restauratnInCart.name} preview={false} />
+              )}
+              <div>
+                <p className='font-bold text-lg'>{restauratnInCart.name}</p>
+                <p className='font-normal text-sm'>{restauratnInCart.address.street}</p>
+              </div>
             </div>
           </div>
-        </div>
-        <Table
-          dataSource={cartItems}
-          columns={columns}
-          rowKey={(record: any) => record.foodItem._id}
-          pagination={false}
-          className='shadow-lg'
-        />
+          <Table
+            dataSource={cartItems}
+            columns={columns}
+            rowKey={(record: any) => record.foodItem._id}
+            pagination={false}
+            className='shadow-lg'
+          />
 
-        {/* Total & Place Order */}
-        <div className="flex justify-between items-center mt-6">
-          <h3 className="text-xl font-semibold">Total: ₹{totalPrice}</h3>
-          <button className='bg-red-500 text-white py-2 px-4 uppercase hover:bg-red-600 hover:shadow-md' onClick={proceedCheckout}>
-            Proceed to Checkout
-          </button>
+          {/* Total & Place Order */}
+          <div className="flex justify-between items-center mt-6">
+            <h3 className="text-xl font-semibold">Total: ₹{totalPrice}</h3>
+            <button className='bg-red-500 text-white py-2 px-4 uppercase hover:bg-red-600 hover:shadow-md' onClick={proceedCheckout}>
+              Proceed to Checkout
+            </button>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className='w-3/5 mx-auto text-center mt-10'>
+          <h2 className='text-3xl mb-4'>Your cart is empty</h2>
+          <Link href={'/restaurants'} className='bg-red-500 text-white px-6 py-2'>Start Ordering</Link>
+        </div>
+      )}
     </div>
   )
 }

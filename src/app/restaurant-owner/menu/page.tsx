@@ -112,7 +112,7 @@ const FoodMenu = () => {
         rowKey="_id"
         loading={loading}
         pagination={{ pageSize: 10 }}
-        className='mt-2'
+        className='mt-2 rounded-none'
       />
     </div >
   );

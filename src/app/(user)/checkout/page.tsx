@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { ICreateOrder, IOrderItem } from '@/utils/types';
 import { OrderStatusEnum, PaymentMethodEnum } from '@/utils/const';
 import { API_ENDPOINTS } from '@/utils/api-endpoints';
+import Link from 'next/link';
 
 const CheckoutPage = () => {
   const { cartItems, clearCart, restauratnInCart } = useCart();
@@ -86,11 +87,18 @@ const CheckoutPage = () => {
                   <p className='mb-1'><span>Email:</span> {user.email}</p>
                   <p className='mb-1'><span>Mobile:</span> {user.mobile}</p>
                 </Card>
-                {user.address && (
-                  <Card title="Delivery address" className='shadow-md rounded-none mt-4 p-2'>
+
+                <Card title="Delivery address" className='shadow-md rounded-none mt-4 p-2'>
+                  {user.address && user.address.street && user.address.city && user.address.state && user.address.zipcode ? (
                     <p> {`${user.address.street}, ${user.address.city}, ${user.address.state}, ${user.address.zipcode}`}</p>
-                  </Card>
-                )}
+                  ) : (
+                    <>
+                      <p className='text-red-500 mb-2'>Delivery address is missing. Please add it under your profile</p>
+                      <Link className='border border-blue-500 py-1 px-6' href={"/profile"}>Visit Profile</Link>
+                    </>
+                  )}
+                </Card>
+
                 <Card title="Choose payment method" className='shadow-md rounded-none mt-4 p-2'>
                   <div>
                     <Radio.Group value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>

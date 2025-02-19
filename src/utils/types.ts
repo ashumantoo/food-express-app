@@ -99,4 +99,5 @@ export interface IUserOrder {
   address: string;
   status: OrderStatusEnum;
   items: IUserOrderItem[];
+  user?: IUser;
 }
