@@ -1,5 +1,7 @@
 import { IAdress } from "@/models/user";
 import { CuisinesEnum, MenuCategoriesEnum, OrderStatusEnum, PaymentMethodEnum } from "./const";
+import { IInvoiceItem } from "@/models/invoice";
+import { IOrder } from "@/models/order";
 
 export interface IUserRegistration extends IUserLogin {
   firstName: string;
@@ -85,6 +87,35 @@ export interface ICreateOrder {
   phone: string;
   paymentMethod: PaymentMethodEnum;
   status: OrderStatusEnum;
+}
+
+export interface ICreateInvoice {
+  order: string;
+  restaurant: string;
+  user: string;
+  items: IInvoiceItem[];
+  subTotal: number;
+  taxAmount: number;
+  taxPercent: number;
+  deliveryCharge: number;
+  totalAmount: number;
+  status: "UNPAID" | "PAID" | "CANCELLED";
+  dueDate: string;
+}
+
+export interface IViewInvoice {
+  _id: string;
+  user: IUser;
+  order: IUserOrder;
+  restaurant: IRestaurant;
+  items: IInvoiceItem[];
+  subTotal: number;
+  taxAmount: number;
+  taxPercent: number;
+  deliveryCharge: number;
+  totalAmount: number;
+  status: "UNPAID" | "PAID" | "CANCELLED";
+  dueDate: string;
 }
 
 export interface IUserOrderItem {

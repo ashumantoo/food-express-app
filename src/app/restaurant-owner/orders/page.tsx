@@ -192,7 +192,7 @@ const Orders = () => {
         onOk={() => updateOrderStatus()}
         onCancel={() => setOpen(false)}
         footer={[
-          <button key={"cancel"} className='border border-red-500 py-1 px-4 ml-2 rounded-md' onClick={() => setOpen(false)}>Cancel</button>,
+          <button key={"cancel"} className='border border-red-500 py-1 px-4 ml-2 rounded-md text-red-500' onClick={() => setOpen(false)}>Cancel</button>,
           <button key={"confirm"} className='bg-red-500 py-1 px-4 ml-4 mt-2 text-white rounded-md' onClick={() => updateOrderStatus()}>Confirm</button>
         ]}
       >

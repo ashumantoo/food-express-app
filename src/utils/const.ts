@@ -190,6 +190,20 @@ export const OrderStatusEnumValue: {
   CANCELLED: 'Cancelled'
 }
 
+export enum InvoiceStatusEnum {
+  UNPAID = "UNPAID",
+  PAID = "PAID",
+  CANCELLED = "CANCELLED"
+}
+
+export const InvoiceStatusValue: {
+  [key in InvoiceStatusEnum]: string
+} = {
+  PAID: 'Paid',
+  UNPAID: 'Unpaid',
+  CANCELLED: 'Cancelled'
+}
+
 export const workingDaysOptions = [
   {
     label: "Monday",

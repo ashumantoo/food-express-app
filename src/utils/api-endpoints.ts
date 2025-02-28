@@ -1,3 +1,4 @@
+import invoice from "@/models/invoice";
 import restaurant from "@/models/restaurant";
 
 const baseUrl = process.env.API_BASE_URL || "http://localhost:3000/api";
@@ -10,8 +11,10 @@ export const API_ENDPOINTS = {
   meals: `${baseUrl}/meals`,
   cart: `${baseUrl}/cart`,
   orders: `${baseUrl}/orders`,
+  invoices: `${baseUrl}/invoices`,
   restaurant_owner: {
     menu: `${baseUrl}/restaurant-owner/menu`,
-    order: `${baseUrl}/restaurant-owner/orders`
+    order: `${baseUrl}/restaurant-owner/orders`,
+    invoices: `${baseUrl}/restaurant-owner/invoices`
   }
 }

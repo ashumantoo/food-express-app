@@ -6,10 +6,11 @@ import { Button, Card, Form, Input, Radio, message } from "antd";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { ICreateOrder, IOrderItem } from '@/utils/types';
-import { OrderStatusEnum, PaymentMethodEnum } from '@/utils/const';
+import { ICreateInvoice, ICreateOrder, IOrderItem } from '@/utils/types';
+import { InvoiceStatusEnum, OrderStatusEnum, PaymentMethodEnum } from '@/utils/const';
 import { API_ENDPOINTS } from '@/utils/api-endpoints';
 import Link from 'next/link';
+import { IInvoiceItem } from '@/models/invoice';
 
 const CheckoutPage = () => {
   const { cartItems, clearCart, restauratnInCart } = useCart();
@@ -25,6 +26,25 @@ const CheckoutPage = () => {
   const tax = subtotal * 0.125; // 12.5% tax
   const deliveryFee = subtotal > 500 ? 0 : 40; // Free delivery above ₹500
   const total = subtotal + tax + deliveryFee;
+
+
+  const createInvoice = async (invoicePayload: ICreateInvoice) => {
+    try {
+      const res = await fetch(`${API_ENDPOINTS.invoices}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(invoicePayload),
+      });
+      const jsonResposne = await res.json();
+      if (jsonResposne.success) {
+        messageApi.success("Order and Invoice created successfully!");
+        clearCart();
+        router.push("/orders");
+      }
+    } catch (error) {
+      console.error("Error creating invoice for order:", error);
+    }
+  }
 
   // Handle Order Placement
   const placeOrder = async () => {
@@ -43,6 +63,17 @@ const CheckoutPage = () => {
         price: item.foodItem.discountedPrice,
       }
     });
+
+    const invoiceItems: IInvoiceItem[] = cartItems.map((item: any) => {
+      return {
+        name: item.foodItem.name,
+        description: item.foodItem.description,
+        quantity: item.quantity,
+        price: item.foodItem.discountedPrice,
+        total: item.quantity * item.foodItem.discountedPrice
+      }
+    });
+
     const orderPayload: ICreateOrder = {
       user: user.id,
       phone: user.mobile,
@@ -54,6 +85,20 @@ const CheckoutPage = () => {
       status: OrderStatusEnum.PENDING
     }
 
+    const invoiceData: ICreateInvoice = {
+      user: user.id,
+      restaurant: restauratnInCart._id,
+      order: "",
+      items: invoiceItems,
+      subTotal: subtotal,
+      taxAmount: tax,
+      deliveryCharge: deliveryFee,
+      taxPercent: 12.5,
+      totalAmount: total,
+      status: InvoiceStatusEnum.UNPAID,
+      dueDate: new Date().toISOString()
+    }
+
     try {
       const res = await fetch(`${API_ENDPOINTS.orders}`, {
         method: "POST",
@@ -62,9 +107,8 @@ const CheckoutPage = () => {
       });
       const jsonResposne = await res.json();
       if (jsonResposne.success) {
-        messageApi.success("Order placed successfully!");
-        clearCart();
-        router.push("/orders");
+        invoiceData.order = jsonResposne.data._id;
+        await createInvoice(invoiceData);
       }
     } catch (error) {
       console.error("Error adding to cart:", error);

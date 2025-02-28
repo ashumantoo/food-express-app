@@ -8,10 +8,13 @@ import { API_ENDPOINTS } from "@/utils/api-endpoints";
 import { useRouter } from "next/navigation";
 import { IUserOrder } from '@/utils/types';
 import { OrderStatusEnum, PaymentMethodEnum } from '@/utils/const';
+import ViewInvoice from '@/components/view-invoice';
 
 const UserOrders = () => {
   const [orders, setOrders] = useState<IUserOrder[]>([]);
   const [loading, setLoading] = useState(true);
+  const [openViewInvoice, setOpenViewInvoice] = useState(false);
+  const [selectedOrderId, setSelectedOrderId] = useState("");
   const [messageApi, contextHolder] = message.useMessage();
   const router = useRouter();
 
@@ -97,12 +100,23 @@ const UserOrders = () => {
       title: "Action",
       key: "action",
       render: (_, record) => (
-        <button
-          onClick={() => router.push(`/orders/${record._id}`)}
-          className="bg-red-500 text-white px-3 py-1 hover:bg-red-600"
-        >
-          View Details
-        </button>
+        <>
+          <button
+            onClick={() => router.push(`/orders/${record._id}`)}
+            className="bg-red-500 text-white px-3 py-1 hover:bg-red-600"
+          >
+            View Details
+          </button>
+          <button
+            onClick={() => {
+              setSelectedOrderId(record._id)
+              setOpenViewInvoice(true)
+            }}
+            className="border border-red-500 text-red-500 px-3 py-1 ml-2 hover:bg-red-100"
+          >
+            View Invoice
+          </button>
+        </>
       ),
     },
   ];
@@ -119,6 +133,12 @@ const UserOrders = () => {
           <Table columns={columns} dataSource={orders} rowKey="_id" pagination={{ pageSize: 5 }} />
         )}
       </div>
+      {openViewInvoice &&
+        <ViewInvoice
+          open={openViewInvoice}
+          orderId={selectedOrderId}
+          handleClose={() => setOpenViewInvoice(false)}
+        />}
     </div>
   )
 }
