@@ -1,25 +1,24 @@
 "use client";
 import Header from '@/components/header'
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useCart } from "@/context/cart-context";
 import { Button, Card, Form, Input, Radio, message } from "antd";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { ICreateInvoice, ICreateOrder, IOrderItem } from '@/utils/types';
+import { ICreateInvoice, ICreateOrder, ILocalStorageUser, IOrderItem, IUser } from '@/utils/types';
 import { InvoiceStatusEnum, OrderStatusEnum, PaymentMethodEnum } from '@/utils/const';
 import { API_ENDPOINTS } from '@/utils/api-endpoints';
 import Link from 'next/link';
 import { IInvoiceItem } from '@/models/invoice';
 
 const CheckoutPage = () => {
+  const [user, setUser] = useState<ILocalStorageUser>();
   const { cartItems, clearCart, restauratnInCart } = useCart();
   const { register, handleSubmit } = useForm();
   const [paymentMethod, setPaymentMethod] = useState(PaymentMethodEnum.COD);
   const [messageApi, contextHolder] = message.useMessage();
   const router = useRouter();
-  const userItem = localStorage.getItem('user');
-  const user = userItem ? JSON.parse(userItem) : null;
 
   // Calculate Total Price
   const subtotal = cartItems.reduce((sum, item: any) => sum + item.foodItem.discountedPrice * item.quantity, 0);
@@ -114,6 +113,14 @@ const CheckoutPage = () => {
       console.error("Error adding to cart:", error);
     }
   };
+
+  useEffect(() => {
+    const userItem = localStorage.getItem('user');
+    const user = userItem ? JSON.parse(userItem) : null;
+    if (user) {
+      setUser(user);
+    }
+  }, []);
 
   return (
     <div>

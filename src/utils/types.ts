@@ -40,6 +40,16 @@ export interface IUser {
   isActive: boolean;
 }
 
+export interface ILocalStorageUser {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  mobile: string;
+  address: IAdress;
+  role: string;
+}
+
 export interface IRestaurant {
   _id: string;
   name: string;

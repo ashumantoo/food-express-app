@@ -37,9 +37,8 @@ const Register: FC = () => {
       } else {
         alert(jsonResponse.message);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.log(error);
-      alert(error.message);
       throw error;
     }
   }
@@ -69,9 +68,8 @@ const Register: FC = () => {
       } else {
         alert(jsonResponse.message);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.log("Error while creating restaurant--->", error);
-      alert(error.message)
     }
   }
 

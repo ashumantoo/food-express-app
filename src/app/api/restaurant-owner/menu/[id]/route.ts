@@ -38,7 +38,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   }
 }
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   await connectDB();
   const cookie = (await cookies()).get('session')?.value
   const session = await decrypt(cookie);
@@ -46,7 +46,8 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
   if (session && session.role === RoleTypeEnum.USER) return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
 
   try {
-    await Menu.findByIdAndDelete(params.id);
+    const { id } = await params;
+    await Menu.findByIdAndDelete(id);
     return NextResponse.json({ success: true, message: "Menu item deleted" });
   } catch (error) {
     return NextResponse.json({ success: false, message: "Error deleting menu item" }, { status: 500 });

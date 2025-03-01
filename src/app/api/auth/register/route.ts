@@ -19,6 +19,7 @@ export async function POST(req: Request) {
     const _newUser = await newUser.save();
 
     return NextResponse.json({ success: true, message: "User created successfully", data: _newUser }, { status: 201 });
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
