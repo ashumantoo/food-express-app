@@ -1,7 +1,5 @@
-import invoice from "@/models/invoice";
-import restaurant from "@/models/restaurant";
+const baseUrl = `https://food-express-kappa.vercel.app/api`;
 
-const baseUrl = process.env.API_BASE_URL || "http://localhost:3000/api";
 export const API_ENDPOINTS = {
   register: `${baseUrl}/auth/register`,
   login: `${baseUrl}/auth/login`,
