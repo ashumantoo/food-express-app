@@ -1,4 +1,4 @@
-const baseUrl = `https://food-express-kappa.vercel.app/api`;
+const baseUrl = `${process.env.NEXT_PUBLIC_BASE_API_URL}/api`;
 
 export const API_ENDPOINTS = {
   register: `${baseUrl}/auth/register`,
