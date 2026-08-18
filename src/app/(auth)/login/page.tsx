@@ -1,13 +1,15 @@
 'use client'
 import Header from '@/components/header';
+import { UserContext } from '@/context/user-context';
 import { API_ENDPOINTS } from '@/utils/api-endpoints';
 import { RoleTypeEnum, UserLoginInitialValue } from '@/utils/const';
 import { IUserLogin } from '@/utils/types';
 import { useRouter } from 'next/navigation';
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useContext, useState } from 'react';
 
 function Login() {
   const router = useRouter();
+  const userContext = useContext(UserContext)
   const [values, setValues] = useState<IUserLogin>(UserLoginInitialValue);
 
   const handleSubmit = async (event: FormEvent) => {
@@ -22,7 +24,10 @@ function Login() {
       const jsonResponse = await apiResponse.json();
       if (jsonResponse.success) {
         const { user } = jsonResponse;
+        //TODO: saving user data to local storage can be removed since now 
+        // the data is getting saved into context api
         localStorage.setItem('user', JSON.stringify(user));
+        userContext?.setUser(user)
         if (user.role === RoleTypeEnum.USER) {
           router.push("/");
         } else {

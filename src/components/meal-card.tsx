@@ -1,7 +1,8 @@
+import { UserContext } from '@/context/user-context';
 import { MenuCategoriesEnum, MenuCategoriesValue } from '@/utils/const';
 import { IMenu } from '@/utils/types';
 import { useRouter } from 'next/navigation';
-import React, { FC, useEffect } from 'react';
+import React, { FC, useContext, useEffect } from 'react';
 
 interface IProps {
   meal: IMenu
@@ -9,6 +10,7 @@ interface IProps {
 
 const MealCard: FC<IProps> = ({ meal }) => {
   const router = useRouter();
+  const userContext = useContext(UserContext)
 
   const handleAdd = () => {
     const user = localStorage.getItem('user');

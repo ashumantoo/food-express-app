@@ -5,12 +5,14 @@ import { IMenu, IRestaurantDetails } from '@/utils/types';
 import { GlobalOutlined, MinusOutlined, PlusOutlined, TagFilled } from '@ant-design/icons';
 import { Image, message, Spin } from 'antd';
 import { useParams, useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useCart } from '@/context/cart-context';
+import { UserContext } from '@/context/user-context';
 
 const RestaurantDetails = () => {
   const router = useRouter()
   const { id } = useParams();
+  const userContext = useContext(UserContext)
   const [messageApi, contextHolder] = message.useMessage();
   const [restaurantDetails, setRestaurantDetails] = useState<IRestaurantDetails>();
   const [currentRestaurantId, setCurrentReataurantId] = useState("");
@@ -40,7 +42,7 @@ const RestaurantDetails = () => {
   }
 
   const handleAddToCart = (meal: IMenu) => {
-    const user = localStorage.getItem('user');
+    const user = userContext?.user
     if (!user) {
       router.push('/login')
     } else {
